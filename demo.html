@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>My Singer</title>
+</head>
+<body>
+
+<h1>テスト</h1>
+
+<button id="playBtn">
+あいうえお
+</button>
+
+<script>
+
+const files = [
+  "あ.m4a",
+  "い.m4a",
+  "う.m4a",
+  "え.m4a",
+  "お.m4a"
+];
+
+document.getElementById("playBtn")
+.addEventListener("click", async () => {
+
+  const ctx = new AudioContext();
+
+  let start = ctx.currentTime;
+
+  for(const file of files){
+
+    const response = await fetch(file);
+
+    const arrayBuffer =
+      await response.arrayBuffer();
+
+    const buffer =
+      await ctx.decodeAudioData(arrayBuffer);
+
+    const source =
+      ctx.createBufferSource();
+
+    source.buffer = buffer;
+
+    source.connect(ctx.destination);
+
+    source.start(start);
+
+    start += buffer.duration;
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
